@@ -1,6 +1,7 @@
 import requests
 from datetime import datetime
 
+from config import settings
 from schemas import daily_weather_api
 
 class daily():
@@ -8,12 +9,16 @@ class daily():
         ...
 
     def get_daily_weather_data(self):
-        # data = requests.get('https://api.openweathermap.org/data/2.5/weather?lat=20.971530&lon=105.765346&appid=6ca743df5e6a3d1d534bdc34ac1b8460&units=metric&lang=vi')
-        data = requests.get('https://api.openweathermap.org/data/2.5/weather?lat=20.971530&lon=105.765346&appid=ca743df5e6a3d1d534bdc34ac1b8460&units=metric&lang=vi')
+        data = requests.get(f'https://api.openweathermap.org/data/2.5/weather?lat={settings.LATITUDE}&lon={settings.LONGITUDE}.765346&appid={settings.OPENWEATHER_API_KEY}&units=metric&lang=vi')
+        print (f'https://api.openweathermap.org/data/2.5/weather?lat={settings.LATITUDE}&lon={settings.LONGITUDE}&appid={settings.OPENWEATHER_API_KEY}&units=metric&lang=vi')
         if data.status_code == 200:
-            return data.json(), "Success"
-        elif 400 < data.status_code < 500:
-            return data.json(), "Failed" 
+            data.json()
+            self.save_daily_weather_data(data, "Success")
+            return data
+        elif 400 <= data.status_code < 500:
+            data.json()
+            self.save_daily_weather_data(data, "Failed")
+            return data
 
 
     def save_daily_weather_data(self, data, status_message):

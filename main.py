@@ -9,11 +9,10 @@ app = FastAPI()
 mongo_client
 
 @app.get("/Thời tiết hiện tại")
-async def root():
+async def current_weather():
     
-    data, status_message = daily_weather.get_daily_weather_data()
-    #check data 
-    daily_weather.save_daily_weather_data(data, status_message)
+    data = daily_weather.get_daily_weather_data()
+    # Check data
 
     weather_status = data["weather"][0]["main"]
     weather_des = data["weather"][0]["description"]
